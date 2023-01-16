@@ -1,0 +1,15 @@
+﻿@model Shopping2023.Data.Entities.Category
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detalles</h1>
+
+<div>
+    <partial name="_CategoryDetails" />
+</div>
+<div>
+    <a asp-action="Edit" class="btn btn-outline-warning" asp-route-id="@Model?.Id">Editar</a> 
+    <a asp-action="Index" class="btn btn-outline-success" >Regresar</a>
+</div>
