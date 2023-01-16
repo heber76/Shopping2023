@@ -3,10 +3,16 @@
  <h4>País</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-4">
         @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-8">
         @Html.DisplayFor(model => model.Name)
+        </dd>
+         <dt class = "col-sm-4">
+        @Html.DisplayNameFor(model => model.StatesNumber)
+        </dt>
+        <dd class = "col-sm-8">
+        @Html.DisplayFor(model => model.StatesNumber)
         </dd>
     </dl>
