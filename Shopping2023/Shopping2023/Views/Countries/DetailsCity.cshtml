@@ -1,0 +1,18 @@
+﻿@model Shopping2023.Data.Entities.City
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<h1>Detalles</h1>
+
+<div>
+    <partial name="_CityDetails" />
+</div>
+<div>
+    <a asp-action="EditCity" class="btn btn-outline-warning" asp-route-id="@Model?.Id">Editar Ciudad</a> 
+    <a asp-action="DetailsState" asp-route-id="@Model?.State.Id" class="btn btn-outline-success" >Regresar</a>
+</div>
+<hr />
+
