@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shopping2023.Data;
 using Shopping2023.Data.Entities;
+using System.Data;
+
 
 namespace Shopping2023.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoriesController:Controller
     {
         private readonly DataContext _context;
@@ -21,7 +25,7 @@ namespace Shopping2023.Controllers
             return View(await _context.Categories.ToListAsync());
         }
 
-
+        
         // GET: Categories/Create
         [HttpGet]
         public IActionResult Create()
