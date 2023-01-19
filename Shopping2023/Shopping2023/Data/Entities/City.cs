@@ -15,7 +15,7 @@ namespace Shopping2023.Data.Entities
 
         public State State { get; set; }
 
-        
+        public ICollection<User> Users { get; set; }
 
     }
 }

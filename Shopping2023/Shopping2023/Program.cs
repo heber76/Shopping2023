@@ -11,9 +11,22 @@ builder.Services.AddDbContext<DataContext>(o =>
 });
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
-
+builder.Services.AddTransient<SeedDB>();
 
 var app = builder.Build();
+SeedData(app);
+
+void SeedData(WebApplication app)
+{
+    IServiceScopeFactory? scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+
+    using (IServiceScope? scope = scopedFactory.CreateScope())
+    {
+        SeedDB? service = scope.ServiceProvider.GetService<SeedDB>();
+        service.SeedAsync().Wait();
+    }
+}
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
