@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Shopping2023.Data;
+using Shopping2023.Data.Entities;
+using Shopping2023.Data.Enums;
 using Shopping2023.Helpers;
 using Shopping2023.Models;
 
@@ -9,11 +12,15 @@ namespace Shopping2023.Controllers
     public class AccountController:Controller
     {
         private readonly DataContext _context;
+        private readonly ICombosHelper _combosHelper;
+        private readonly IBlobHelper _blobHelper;
         private readonly IUserHelper _userHelper;
 
-        public AccountController(IUserHelper userHelper, DataContext context)
+        public AccountController(IUserHelper userHelper, DataContext context,ICombosHelper combosHelper,IBlobHelper blobHelper)
         {
             _context = context;
+            _combosHelper = combosHelper;
+            _blobHelper = blobHelper;
             _userHelper = userHelper;
         }
 
@@ -22,6 +29,83 @@ namespace Shopping2023.Controllers
         {
             return View();
         }
+
+        public async Task<IActionResult> Register()
+        {
+            AddUserViewModel model = new()
+            {Id = Guid.Empty.ToString(),
+            Countries = await _combosHelper.GetComboCountriesAsync(),
+            States = await _combosHelper.GetComboStatesAsync(0),
+            Cities = await _combosHelper.GetComboCitiesAsync(0),
+            UserType= UserType.User,
+              
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(AddUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Guid imageId = Guid.Empty;
+
+                if (model.ImageFile!=null)
+                {
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
+                }
+                model.ImageId = imageId;
+                User user = await _userHelper.AddUserAsync(model);
+                if (user == null)
+                {
+
+                    ModelState.AddModelError(string.Empty, "Este correo ya esta siendo usado");
+                    return View(model);
+                }
+
+                LoginViewModel loginViewModel = new LoginViewModel()
+                {
+                    Password= model.Password,
+                    RememberMe= false,
+                    Username=model.Username
+                };
+                var result2 = await _userHelper.LoginAsync(loginViewModel);
+                if (result2.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
+            return View(model);
+        }
+
+
+        public JsonResult GetStates(int countryId)
+        {
+            Country country = _context.Countries
+                .Include(c => c.States)
+                .FirstOrDefault(c => c.Id == countryId);
+            if (country == null)
+            {
+                return null;
+            }
+
+            return Json(country.States.OrderBy(d => d.Name));
+        }
+
+        public JsonResult GetCities(int stateId)
+        {
+            State state = _context.States
+                .Include(s => s.Cities)
+                .FirstOrDefault(s => s.Id == stateId);
+            if (state == null)
+            {
+                return null;
+            }
+
+            return Json(state.Cities.OrderBy(c => c.Name));
+        }
+
+
 
 
         [HttpGet]

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Shopping2023.Data.Entities
 {
@@ -13,6 +14,7 @@ namespace Shopping2023.Data.Entities
         [Display(Name = "Ciudad")]
         public string Name { get; set; }
 
+        [JsonIgnore]
         public State State { get; set; }
 
         public ICollection<User> Users { get; set; }
