@@ -44,7 +44,7 @@ namespace Shopping2023.Models
             : $"https://shopping2023.blob.core.windows.net/users/{ImageId}";
 
         [Display(Name = "Image")]
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
 
         [Display(Name = "País")]
         [Range(1, int.MaxValue, ErrorMessage = "Debes de seleccionar un país.")]

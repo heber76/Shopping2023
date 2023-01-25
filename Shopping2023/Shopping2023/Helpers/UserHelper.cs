@@ -116,7 +116,7 @@ namespace Shopping2023.Helpers
                 model.Username,
                 model.Password,
                 model.RememberMe,
-                false);
+                true);
         }
 
         public async Task LogoutAsync()

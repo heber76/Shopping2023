@@ -137,9 +137,22 @@ namespace Shopping2023.Controllers
 
                 if (result.Succeeded)
                 {
+
+                    if (Request.Query.Keys.Contains("ReturnUrl"))
+                    {
+                        return Redirect(Request.Query["ReturnUrl"].First());
+                    }
                     return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError(string.Empty,"Email o contraseña incorrectos.");
+                if (result.IsLockedOut)
+                {
+                    ModelState.AddModelError(string.Empty, "Ha superado el máximo número de intentos, su cuenta está bloqueada, intente de nuevo en 5 minutos.");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Email o contraseña incorrectos.");
+                }
+
             }
             return View(model);
         }
