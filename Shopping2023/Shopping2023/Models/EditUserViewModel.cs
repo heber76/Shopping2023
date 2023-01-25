@@ -40,7 +40,7 @@ namespace Shopping2023.Models
         
         [Display(Name = "Foto")]
         public string ImageFullPath => ImageId == Guid.Empty
-            ? $"https://localhost:7084/imagenes/noimage1.png"
+            ? $"https://localhost:7084/imagenes/noimage.png"
             : $"https://shopping2023.blob.core.windows.net/users/{ImageId}";
 
         [Display(Name = "Image")]
