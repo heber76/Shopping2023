@@ -1,4 +1,5 @@
-﻿using Shopping2023.Data.Entities;
+﻿using NuGet.Common;
+using Shopping2023.Data.Entities;
 using Shopping2023.Data.Enums;
 using Shopping2023.Helpers;
 using System.Runtime.Loader;
@@ -48,6 +49,9 @@ namespace Shopping2023.Data
 
                 await _userHelper.AddUserAsync(user, "123456");
                 await _userHelper.AddUserToRoleAsync(user,userType.ToString());
+
+                string token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                await _userHelper.ConfirmEmailAsync(user, token);
             }
             return user;
         }
